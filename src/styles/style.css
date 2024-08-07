@@ -21,6 +21,36 @@ body {
   color: var(--text-color-main);
 }
 
+dialog {
+  place-self: center;
+  padding: 15px;
+  margin: 0;
+}
+
+#dialog-add-task {
+  width: 60vw;
+  height: 80vh;
+}
+
+/* prevent edit the Home project */
+#edit-project {
+  display: none;
+}
+
+form {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 30px;
+}
+
+form > label {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
 nav {
   min-width: 180px;
   width: 15%;
@@ -36,7 +66,8 @@ nav {
 }
 
 .nav-task,
-.nav-project {
+.nav-project,
+.nav-project-list {
   display: flex;
   flex-direction: column;
 }
@@ -54,10 +85,17 @@ ul {
   width: 100%;
 }
 
+svg.svg-delete,
+svg.svg-edit,
+svg.svg-today,
+svg.svg-upcoming {
+  pointer-events: none;
+}
+
 input[type="checkbox"] {
   width: var(--input-checkbox-width-and-hight);
   height: var(--input-checkbox-width-and-hight);
-  margin: 0;
+  color: red;
 }
 
 .nav-item {
@@ -73,17 +111,19 @@ input[type="checkbox"] {
   justify-content: space-between;
 }
 
-.project {
+.btn-nav-project {
+  width: 100%;
   justify-content: space-between;
 }
 
-.project:hover {
-  & > .todo-counter-or-svg-delete > svg {
-    display: none;
+/* Home project == :first-of-type */
+.btn-nav-project:not(:first-of-type):hover {
+  & > .todo-counter-or-svg-delete > button {
+    display: block;
   }
 
   & > .todo-counter-or-svg-delete > span {
-    display: inline-block;
+    display: none;
   }
 }
 
@@ -100,6 +140,12 @@ input[type="checkbox"] {
   gap: 10px;
 }
 
+.btn-add-task:hover {
+  & > span {
+    color: var(--red-color);
+  }
+}
+
 .btn-add-task > span {
   color: var(--text-color-main);
 }
@@ -107,19 +153,29 @@ input[type="checkbox"] {
 .nav-item-left {
   display: flex;
   align-items: center;
+  gap: 5px;
 }
 
 .todo-counter-or-svg-delete {
-  color: var(--red-color);
   display: flex;
   justify-content: flex-end;
   align-items: center;
 }
 
-.todo-counter-or-svg-delete > span {
+.todo-counter-or-svg-delete > span,
+#todo-today-counter,
+#todo-upcoming-counter,
+#todo-completed-counter {
   color: var(--text-color-main);
   font-size: 0.8rem;
+}
+
+.todo-counter-or-svg-delete > button {
   display: none;
+}
+
+.svg-delete {
+  color: var(--red-color);
 }
 
 main {
@@ -159,7 +215,8 @@ main > header {
   padding-bottom: 10px;
 }
 
-.todo-item-title {
+.todo-item-title,
+.todo-item-title-left {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -167,7 +224,19 @@ main > header {
 
 .todo-item-description,
 .todo-item-date-label {
-  margin-left: calc(var(--input-checkbox-width-and-hight) + 4px);
+  margin-left: calc(var(--input-checkbox-width-and-hight));
+}
+
+.todo-item-description:empty {
+  display: none;
+}
+
+button:has(.due-date:empty) {
+  display: none;
+}
+
+button:has(.label-name:empty) {
+  display: none;
 }
 
 .todo-item-date-label {
@@ -181,4 +250,28 @@ main > header {
   display: flex;
   align-items: center;
   gap: 3px;
+}
+
+.past-due {
+  color: var(--red-color);
+  font-size: 1.2rem;
+  place-self: center;
+}
+
+.prio-flag {
+  font-size: 1.2rem;
+}
+
+#todo-today-counter,
+#todo-upcoming-counter,
+#todo-completed-counter {
+  text-align: center;
+  margin: auto 0 auto auto;
+}
+
+#completed > p {
+  width: 24px;
+  height: 24px;
+  line-height: 23px;
+  font-size: 23px;
 }

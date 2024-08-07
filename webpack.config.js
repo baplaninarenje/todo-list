@@ -4,6 +4,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
   entry: "./src/index.js",
+  devtool: "source-map",
   plugins: [
     new HtmlWebpackPlugin({
       title: "Todo List",
@@ -47,5 +48,5 @@ module.exports = {
     path: path.resolve(__dirname, "dist"),
     clean: true,
   },
-  mode: "development",
+  mode: "production",
 };

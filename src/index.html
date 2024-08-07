@@ -6,6 +6,120 @@
     <title>Todo List</title>
   </head>
   <body>
+    <dialog id="dialog-edit-todo">
+      <form id="form-todo-edit" method="post" action="#">
+        <label for="title-edit-todo" class="required">
+          <input
+            required
+            type="text"
+            placeholder="Task name"
+            name="title-todo"
+            id="title-edit-todo"
+        /></label>
+        <label for="description-edit">
+          <input
+            type="text"
+            placeholder="Description"
+            name="description"
+            id="description-edit"
+        /></label>
+        <label for="dueDate-edit"
+          >Due Date: <input type="date" name="dueDate" id="dueDate-edit"
+        /></label>
+        <label for="priority"
+          ><span>&#9872;</span> Priority:
+          <select name="priority" id="priority-edit">
+            <option value="">Set priority p1, p2, p3, p4</option>
+            <option value="p1"><span>&#9872;</span> Priority 1</option>
+            <option value="p2"><span>&#9872;</span> Priority 2</option>
+            <option value="p3"><span>&#9872;</span> Priority 3</option>
+            <option value="p4"><span>&#9872;</span> Priority 4</option>
+          </select>
+        </label>
+        <label for="project-edit">
+          Select a project #
+          <select id="project-edit" name="project"></select>
+        </label>
+        <input
+          type="reset"
+          aria-label="close"
+          value="Cancel"
+          formnovalidate
+          id="dialog-close-todo-edit"
+        />
+        <button form="form-todo-edit" id="form-edit-todo-btn" class="btn">
+          Edit Task
+        </button>
+      </form>
+    </dialog>
+    <dialog id="dialog-add-project">
+      <form id="form-project" method="post" action="#">
+        <label for="title-project" class="required">
+          Name
+          <input required type="text" name="title-project" id="title-project"
+        /></label>
+        <label for="color-project">
+          Color
+          <input type="color" name="color-project" id="color-project"
+        /></label>
+        <input
+          type="reset"
+          aria-label="close"
+          value="Cancel"
+          formnovalidate
+          id="dialog-close-project"
+        />
+        <button form="form-project" id="form-project-btn" class="btn">
+          Add Project
+        </button>
+      </form>
+    </dialog>
+    <dialog id="dialog-add-todo">
+      <form id="form-todo" method="post" action="#">
+        <label for="title-todo" class="required">
+          <input
+            required
+            type="text"
+            placeholder="Task name"
+            name="title-todo"
+            id="title-todo"
+        /></label>
+        <label for="description">
+          <input
+            type="text"
+            placeholder="Description"
+            name="description"
+            id="description"
+        /></label>
+        <label for="dueDate"
+          >Due Date: <input type="date" name="dueDate" id="dueDate"
+        /></label>
+        <label for="priority"
+          ><span>&#9872;</span> Priority:
+          <select name="priority" id="priority">
+            <option value="">Set priority p1, p2, p3, p4</option>
+            <option value="p1"><span>&#9872;</span> Priority 1</option>
+            <option value="p2"><span>&#9872;</span> Priority 2</option>
+            <option value="p3"><span>&#9872;</span> Priority 3</option>
+            <option value="p4"><span>&#9872;</span> Priority 4</option>
+          </select>
+        </label>
+        <label for="project">
+          Select a project #
+          <select id="project" name="project"></select>
+        </label>
+        <input
+          type="reset"
+          aria-label="close"
+          value="Cancel"
+          formnovalidate
+          id="dialog-close-todo"
+        />
+        <button form="form-todo" id="form-todo-btn" class="btn">
+          Add Task
+        </button>
+      </form>
+    </dialog>
     <nav>
       <div class="nav-top">
         <div class="nav-item">
@@ -14,7 +128,10 @@
         </div>
       </div>
       <div class="nav-task">
-        <button class="nav-item btn-add-task">
+        <button
+          class="nav-item btn-add-task"
+          data-project-uuid="92da8517-0cf9-4741-937e-046ff150c7e1"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -31,25 +148,8 @@
           </svg>
           <h4>Add task</h4>
         </button>
-        <button class="nav-item">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <path
-              fill="currentColor"
-              fill-rule="evenodd"
-              d="M16.29 15.584a7 7 0 1 0-.707.707l3.563 3.563a.5.5 0 0 0 .708-.707l-3.563-3.563ZM11 17a6 6 0 1 0 0-12 6 6 0 0 0 0 12Z"
-              clip-rule="evenodd"
-            ></path>
-          </svg>
-          <span>Search</span>
-        </button>
-        <button class="nav-item">
-          <svg width="24" height="24" viewBox="0 0 24 24">
+        <button class="nav-item" id="today">
+          <svg width="24" height="24" viewBox="0 0 24 24" class="svg-today">
             <g fill="currentColor" fill-rule="evenodd">
               <path
                 fill-rule="nonzero"
@@ -66,14 +166,16 @@
             </g>
           </svg>
           <span>Today</span>
+          <span id="todo-today-counter">0</span>
         </button>
-        <button class="nav-item">
+        <button class="nav-item" id="upcoming">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
             height="24"
             fill="none"
             viewBox="0 0 24 24"
+            class="svg-upcoming"
           >
             <path
               fill="currentColor"
@@ -83,27 +185,16 @@
             ></path>
           </svg>
           <span>Upcoming</span>
+          <span id="todo-upcoming-counter">0</span>
         </button>
-        <button class="nav-item">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <path
-              fill="currentColor"
-              fill-rule="evenodd"
-              d="M17.5 6.001h-3a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5Zm-3-1a1.5 1.5 0 0 0-1.5 1.5v3a1.5 1.5 0 0 0 1.5 1.5h3a1.5 1.5 0 0 0 1.5-1.5v-3a1.5 1.5 0 0 0-1.5-1.5h-3Zm-8 9h3a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-3a.5.5 0 0 1 .5-.5Zm-1.5.5a1.5 1.5 0 0 1 1.5-1.5h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3a1.5 1.5 0 0 1-1.5-1.5v-3Zm9.5-.5h3a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-3a.5.5 0 0 1 .5-.5Zm-1.5.5a1.5 1.5 0 0 1 1.5-1.5h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3a1.5 1.5 0 0 1-1.5-1.5v-3Zm-6.5-8.5h3a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-3a.5.5 0 0 1 .5-.5Zm-1.5.5a1.5 1.5 0 0 1 1.5-1.5h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3a1.5 1.5 0 0 1-1.5-1.5v-3Z"
-              clip-rule="evenodd"
-            ></path>
-          </svg>
-          <span>Filters & Labels</span>
+        <button class="nav-item" id="completed">
+          <p>&#9745;</p>
+          <span>Completed</span>
+          <span id="todo-completed-counter">0</span>
         </button>
       </div>
       <div class="nav-project">
-        <button class="nav-item my-projects">
+        <button class="nav-item my-projects btn-add-project">
           <h4>My Projects</h4>
           <svg width="13" height="13" id="btn-add-project">
             <path
@@ -113,61 +204,7 @@
             ></path>
           </svg>
         </button>
-        <button class="nav-item project">
-          <div class="nav-item-left">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              fill="none"
-              viewBox="0 0 24 24"
-              class=""
-              style="color: var(--named-color-charcoal)"
-            >
-              <path
-                fill="currentColor"
-                fill-rule="evenodd"
-                d="M15.994 6.082a.5.5 0 1 0-.987-.164L14.493 9h-3.986l.486-2.918a.5.5 0 1 0-.986-.164L9.493 9H7a.5.5 0 1 0 0 1h2.326l-.666 4H6a.5.5 0 0 0 0 1h2.493l-.486 2.918a.5.5 0 1 0 .986.164L9.507 15h3.986l-.486 2.918a.5.5 0 1 0 .987.164L14.507 15H17a.5.5 0 1 0 0-1h-2.326l.667-4H18a.5.5 0 1 0 0-1h-2.493l.487-2.918ZM14.327 10H10.34l-.667 4h3.987l.667-4Z"
-                clip-rule="evenodd"
-              ></path>
-            </svg>
-            <span>Home</span>
-            <img
-              class="emoji"
-              alt="🏡"
-              src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f3e1.svg"
-            />
-          </div>
-          <div class="todo-counter-or-svg-delete">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              aria-hidden="true"
-            >
-              <g fill="none" fill-rule="evenodd">
-                <path d="M0 0h24v24H0z"></path>
-                <rect
-                  width="14"
-                  height="1"
-                  x="5"
-                  y="6"
-                  fill="currentColor"
-                  rx="0.5"
-                ></rect>
-                <path
-                  fill="currentColor"
-                  d="M10 9h1v8h-1V9zm3 0h1v8h-1V9z"
-                ></path>
-                <path
-                  stroke="currentColor"
-                  d="M17.5 6.5h-11V18A1.5 1.5 0 0 0 8 19.5h8a1.5 1.5 0 0 0 1.5-1.5V6.5zm-9 0h7V5A1.5 1.5 0 0 0 14 3.5h-4A1.5 1.5 0 0 0 8.5 5v1.5z"
-                ></path>
-              </g>
-            </svg>
-            <span>2</span>
-          </div>
-        </button>
+        <div class="nav-project-list"></div>
       </div>
     </nav>
     <main>
@@ -176,8 +213,13 @@
           <h4 id="btn-directory">My Projects</h4>
           <span> /</span>
         </button>
-        <button class="nav-item">
-          <svg width="24" height="24" aria-hidden="true">
+        <button
+          class="nav-item"
+          id="edit-project"
+          data-project-uuid="92da8517-0cf9-4741-937e-046ff150c7e1"
+        >
+          Edit Project
+          <svg width="24" height="24" aria-hidden="true" class="svg-edit">
             <g fill="none" fill-rule="evenodd">
               <path
                 fill="currentColor"
@@ -189,191 +231,16 @@
               ></path>
             </g>
           </svg>
-          <span>Edit</span>
         </button>
       </header>
       <section class="content" id="content">
-        <h1 id="content-heading">Home</h1>
+        <h1 id="content-heading"># Home</h1>
 
-        <ul class="todo-items-list">
-          <li class="todo-item">
-            <div class="todo-item-title">
-              <div class="todo-item-title-left">
-                <input type="checkbox" class="checkbox" />
-                <button>first task</button>
-              </div>
-              <div class="todo-item-title-right">
-                <button>
-                  <svg width="24" height="24">
-                    <g fill="none" fill-rule="evenodd">
-                      <path
-                        fill="currentColor"
-                        d="M9.5 19h10a.5.5 0 1 1 0 1h-10a.5.5 0 1 1 0-1z"
-                      ></path>
-                      <path
-                        stroke="currentColor"
-                        d="M4.42 16.03a1.5 1.5 0 0 0-.43.9l-.22 2.02a.5.5 0 0 0 .55.55l2.02-.21a1.5 1.5 0 0 0 .9-.44L18.7 7.4a1.5 1.5 0 0 0 0-2.12l-.7-.7a1.5 1.5 0 0 0-2.13 0L4.42 16.02z"
-                      ></path>
-                    </g>
-                  </svg>
-                </button>
-                <button>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    aria-hidden="true"
-                  >
-                    <g fill="none" fill-rule="evenodd">
-                      <path d="M0 0h24v24H0z"></path>
-                      <rect
-                        width="14"
-                        height="1"
-                        x="5"
-                        y="6"
-                        fill="currentColor"
-                        rx="0.5"
-                      ></rect>
-                      <path
-                        fill="currentColor"
-                        d="M10 9h1v8h-1V9zm3 0h1v8h-1V9z"
-                      ></path>
-                      <path
-                        stroke="currentColor"
-                        d="M17.5 6.5h-11V18A1.5 1.5 0 0 0 8 19.5h8a1.5 1.5 0 0 0 1.5-1.5V6.5zm-9 0h7V5A1.5 1.5 0 0 0 14 3.5h-4A1.5 1.5 0 0 0 8.5 5v1.5z"
-                      ></path>
-                    </g>
-                  </svg>
-                </button>
-              </div>
-            </div>
-            <button class="todo-item-description">description</button>
-            <div class="todo-item-date-label">
-              <button>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="12"
-                  height="12"
-                  fill="none"
-                  viewBox="0 0 12 12"
-                  class="calendar_icon"
-                >
-                  <path
-                    fill="currentColor"
-                    fill-rule="evenodd"
-                    d="M9.5 1h-7A1.5 1.5 0 0 0 1 2.5v7A1.5 1.5 0 0 0 2.5 11h7A1.5 1.5 0 0 0 11 9.5v-7A1.5 1.5 0 0 0 9.5 1ZM2 2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5v-7ZM8.75 8a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM3.5 4a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5Z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-                <span class="due-date">21 Aug</span>
-              </button>
-              <button>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="12"
-                  height="12"
-                  viewBox="0 0 12 12"
-                >
-                  <path
-                    fill="currentColor"
-                    fill-rule="evenodd"
-                    d="M9.357 1C10.264 1 11 1.736 11 2.643V6.07c0 .436-.173.854-.481 1.162L7.232 10.52a1.643 1.643 0 0 1-2.323 0L1.48 7.09c-.64-.64-.64-1.68.001-2.322L4.768 1.48C5.076 1.173 5.494 1 5.93 1h3.427zm-.07.91H5.93a.805.805 0 0 0-.569.235L2.145 5.362a.805.805 0 0 0 0 1.138L5.5 9.855a.805.805 0 0 0 1.138 0l3.217-3.217a.805.805 0 0 0 .236-.569V2.713a.804.804 0 0 0-.804-.804zM7.364 3.726a.91.91 0 1 1 0 1.818.91.91 0 0 1 0-1.818z"
-                  ></path>
-                </svg>
-                <span class="label-name">test label</span>
-              </button>
-            </div>
-          </li>
-          <li class="todo-item">
-            <div class="todo-item-title">
-              <div class="todo-item-title-left">
-                <input type="checkbox" class="checkbox" />
-                <button>second task</button>
-              </div>
-              <div class="todo-item-title-right">
-                <button>
-                  <svg width="24" height="24">
-                    <g fill="none" fill-rule="evenodd">
-                      <path
-                        fill="currentColor"
-                        d="M9.5 19h10a.5.5 0 1 1 0 1h-10a.5.5 0 1 1 0-1z"
-                      ></path>
-                      <path
-                        stroke="currentColor"
-                        d="M4.42 16.03a1.5 1.5 0 0 0-.43.9l-.22 2.02a.5.5 0 0 0 .55.55l2.02-.21a1.5 1.5 0 0 0 .9-.44L18.7 7.4a1.5 1.5 0 0 0 0-2.12l-.7-.7a1.5 1.5 0 0 0-2.13 0L4.42 16.02z"
-                      ></path>
-                    </g>
-                  </svg>
-                </button>
-                <button>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    aria-hidden="true"
-                  >
-                    <g fill="none" fill-rule="evenodd">
-                      <path d="M0 0h24v24H0z"></path>
-                      <rect
-                        width="14"
-                        height="1"
-                        x="5"
-                        y="6"
-                        fill="currentColor"
-                        rx="0.5"
-                      ></rect>
-                      <path
-                        fill="currentColor"
-                        d="M10 9h1v8h-1V9zm3 0h1v8h-1V9z"
-                      ></path>
-                      <path
-                        stroke="currentColor"
-                        d="M17.5 6.5h-11V18A1.5 1.5 0 0 0 8 19.5h8a1.5 1.5 0 0 0 1.5-1.5V6.5zm-9 0h7V5A1.5 1.5 0 0 0 14 3.5h-4A1.5 1.5 0 0 0 8.5 5v1.5z"
-                      ></path>
-                    </g>
-                  </svg>
-                </button>
-              </div>
-            </div>
-            <button class="todo-item-description">description 2</button>
-            <div class="todo-item-date-label">
-              <button>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="12"
-                  height="12"
-                  fill="none"
-                  viewBox="0 0 12 12"
-                  class="calendar_icon"
-                >
-                  <path
-                    fill="currentColor"
-                    fill-rule="evenodd"
-                    d="M9.5 1h-7A1.5 1.5 0 0 0 1 2.5v7A1.5 1.5 0 0 0 2.5 11h7A1.5 1.5 0 0 0 11 9.5v-7A1.5 1.5 0 0 0 9.5 1ZM2 2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5v-7ZM8.75 8a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM3.5 4a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5Z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-                <span class="due-date">30 Aug</span>
-              </button>
-              <button>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="12"
-                  height="12"
-                  viewBox="0 0 12 12"
-                >
-                  <path
-                    fill="currentColor"
-                    fill-rule="evenodd"
-                    d="M9.357 1C10.264 1 11 1.736 11 2.643V6.07c0 .436-.173.854-.481 1.162L7.232 10.52a1.643 1.643 0 0 1-2.323 0L1.48 7.09c-.64-.64-.64-1.68.001-2.322L4.768 1.48C5.076 1.173 5.494 1 5.93 1h3.427zm-.07.91H5.93a.805.805 0 0 0-.569.235L2.145 5.362a.805.805 0 0 0 0 1.138L5.5 9.855a.805.805 0 0 0 1.138 0l3.217-3.217a.805.805 0 0 0 .236-.569V2.713a.804.804 0 0 0-.804-.804zM7.364 3.726a.91.91 0 1 1 0 1.818.91.91 0 0 1 0-1.818z"
-                  ></path>
-                </svg>
-                <span class="label-name">test label 2</span>
-              </button>
-            </div>
-          </li>
-        </ul>
-        <button class="btn-add-task">
+        <ul class="todo-items-list"></ul>
+        <button
+          class="btn-add-task"
+          data-project-uuid="92da8517-0cf9-4741-937e-046ff150c7e1"
+        >
           <svg width="13" height="13">
             <path
               fill="currentColor"
